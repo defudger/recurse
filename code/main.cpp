@@ -415,8 +415,9 @@ int main(int argc, char **argv)
             try {
                 rx = new regex::default_regex(
                     opt_rx, regex::optimize | opt_rx_type);
-            } catch(const regex::regex_error &) {
+            } catch(const regex::regex_error &e) {
                 gl->error("Compiling a regular expression failed.");
+                gl->debug(fnd::diagnostic_information(e));
                 return EXIT_FAILURE;
             }
         }
@@ -517,8 +518,6 @@ int main(int argc, char **argv)
     }
     catch(const fnd::exception &e)
     {
-        const fnd::ei_msg *msg = fnd::get_error_info<fnd::ei_msg>(e);
-        const fnd::ei_msg_c *msg_c = fnd::get_error_info<fnd::ei_msg_c>(e);
         const fs::ei_path *p = fnd::get_error_info<fs::ei_path>(e);
         
         gl->fatal("Internal Error");
